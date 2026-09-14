@@ -3,6 +3,7 @@ from .models import User, AttendeeProfile, ManagerProfile, EmployeeProfile
 from .serializers import UserSerializer, AttendeeProfileSerializer, ManagerProfileSerializer, EmployeeProfileSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import make_password
 
 @api_view(["GET"])
 def userlist(request):
@@ -12,15 +13,20 @@ def userlist(request):
 
 @api_view(["POST"])
 def signup_user(request):
-    user = UserSerializer(data=request.data)
-    if user.is_valid():
-        user = user.save()
-        return Response({
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        raw_password = serializer.validated_data.get("password")
+        user = serializer.save(password=make_password(raw_password))
+
+        return Response(
+            {
                 "message": "User registered Successfully.",
                 "user_id": str(user.id),
                 "role": user.role,
-            }, status=status.HTTP_201_CREATED)
-    return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+            },
+            status=status.HTTP_201_CREATED,
+        )
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def complete_profile(request):
