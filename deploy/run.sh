@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-
+source .env
 cd "$(dirname "$0")"
 
 echo "1) Development"
@@ -15,7 +15,7 @@ if [ "$MODE" = "1" ]; then
         docker compose -f docker-compose.dev.yml up -d db
 
         echo "Waiting for PostgreSQL to be ready..."
-        until docker compose -f docker-compose.dev.yml exec db pg_isready -U clickmart_user -d clickmart_db > /dev/null 2>&1; do
+        until docker compose -f docker-compose.dev.yml exec db pg_isready -U "$DB_USER" -d "$DB_PASS" > /dev/null 2>&1; do
             sleep 1
         done
 
