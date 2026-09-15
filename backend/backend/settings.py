@@ -136,12 +136,12 @@ MAILERS = {
 
 #REST framework configuration
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': {
-        'rest_framework_simplejwt.authentication.JWTAtuthentication',
-    },
-    'DEFAULT_PERMISSION_CLASSES': {
-        'rest_framework.permissions.IsAuthenticated',
-    }
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 from datetime import timedelta
