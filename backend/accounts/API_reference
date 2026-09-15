@@ -1,0 +1,128 @@
+API Endpoints
+
+1. http://localhost/health/   [GET]
+
+output:
+{
+    "status": "healthy",
+    "database": "connected"
+}
+
+2. http://localhost/admin/ [GET]
+
+output: Admin Dashboard
+
+3. http://localhost/api/users/ [GET]
+
+output:
+{
+        "id": "1e4f3412-8241-4d3d-8ef2-cea5f15ff995",
+        "f_name": "pradeep",
+        "l_name": "kh",
+        "age": 22,
+        "gender": "male",
+        "city": "Bengaluru",
+        "mobile": "9876543210",
+        "role": "user",
+        "email": "pradeepkh312@gmail.com",
+        "password": "abcd1234",
+        "created_at": "2026-09-13T11:56:30.300791Z"
+    },
+    {
+        "id": "2e55ef4d-75c8-405e-9ea8-80bb7fb770e5",
+        "f_name": "jhon",
+        "l_name": "Doe",
+        "age": 23,
+        "gender": "male",
+        "city": "Delhi",
+        "mobile": "9876543210",
+        "role": "user",
+        "email": "jhon.doe@mail.com",
+        "password": "abcd1234",
+        "created_at": "2026-09-14T11:26:53.610787Z"
+    },
+
+4. http://localhost/api/users/signup [POST]
+
+input:
+{
+"f_name" : "jhon",
+"l_name" : "Doe",
+"age" : 23,
+"gender" : "male",
+"city" : "Delhi",
+"mobile" : "9876543210",
+"role" : "user",
+"email" : "jhon.doe@mail.com",
+"password" : "abcd1234"
+}
+
+output:
+{
+    "message": "User registered Successfully.",
+    "user_id": "e7f523fc-40f2-40dd-8597-5ceeae027e91",
+    "role": "user"
+}
+
+5. http://localhost/api/users/profile [POST]
+
+input: [for user/Attendee]
+{
+    "user_id": "2e55ef4d-75c8-405e-9ea8-80bb7fb770e5",
+    "points": 120
+}
+
+output:
+{
+    "message": "Attendee profile created"
+}
+
+input: [for employee]
+{
+    "user_id": "e7f523fc-40f2-40dd-8597-5ceeae027e91",
+    "experiance": { "1": {"term": 1, "manager_id": "2e55ef4d-75c8-405e-9ea8-80bb7fb770e5", "salary": 35000},
+                    "2": {"term": 2, "manager_id": "5bvssrfv-75c8-405e-9ea8-80bb7fb770e5", "salary": 42000} 
+                },
+    "bank_details": {"name": "ABC Bank", "Branch": "Delhi", "IFSC": "ABCB4456", "ACC No": "123456789"}
+}
+
+output:
+{
+    "message": "Employee profile created"
+}
+
+input: [for Manager]
+{
+    "user_id": "6a21bca6-d215-4d00-b9c2-d426e5c72df5",
+    "organization": "Dance_MC_Dance",
+    "bank_details": {"name": "ABC Bank", "Branch": "Delhi", "IFSC": "ABCB4456", "ACC No": "123456789"},
+    "registration_no": "REGmgr-02378",
+    "license": "https://drive.google.com/license"
+}
+
+output:
+{
+    "message": "Manager profile created"
+}
+
+6.
+
+input:
+{
+"email": "james.toy@mail.com",
+"password": "abcd1234"
+}
+
+output:
+{
+    "message": "Login successful",
+    "tokens": {
+        "refresh": ".........",
+        "access": "........."
+        "id": "62e61c1a-648a-49e9-9938-4c042b90aa2f",
+        "email": "james.toy@mail.com",
+        "role": "manager",
+        "f_name": "james",
+        "l_name": "roy"
+    }
+}
