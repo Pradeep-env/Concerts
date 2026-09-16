@@ -54,7 +54,7 @@ def signup_user(request):
     )
 
 
-@api_view(["POST"])
+@api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def complete_profile(request):
     user = request.user
@@ -72,21 +72,34 @@ def complete_profile(request):
         )
 
     profile_model, serializer_class, role_label, fk_field = role_handlers[user.role]
+    
+    profile = profile_model.objects.filter(**{fk_field: user}).first()
 
-    if profile_model.objects.filter(**{fk_field: user}).exists():
+    if request.method == "GET":
+        if not profile:
+            return Response(
+                {"error": "Profile not found. Please complete setup first."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+            
+        serializer = serializer_class(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == "POST":
+        if profile:
+            return Response(
+                {"error": "Profile already exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(**{fk_field: user})
+
         return Response(
-            {"error": "Profile already exists"},
-            status=status.HTTP_400_BAD_REQUEST,
+            {"message": f"{role_label} profile created", "data": serializer.data},
+            status=status.HTTP_201_CREATED,
         )
-
-    serializer = serializer_class(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save(**{fk_field: user})
-
-    return Response(
-        {"message": f"{role_label} profile created"},
-        status=status.HTTP_201_CREATED,
-    )
 
 @api_view(["PATCH"])
 @permission_classes([IsAuthenticated])
