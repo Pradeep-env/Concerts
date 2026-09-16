@@ -1,21 +1,30 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from .models import AttendeeProfile, EmployeeProfile, ManagerProfile, User
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(DefaultUserAdmin):
     list_display = (
         "id",
         "email",
-        "f_name",
-        "l_name",
+        "username",
         "role",
-        "city",
-        "mobile",
+        "is_active",
+        "is_staff",
         "created_at",
     )
-    search_fields = ("email", "f_name", "l_name", "mobile")
-    list_filter = ("role", "gender", "city")
+    search_fields = ("email", "username")
+    list_filter = ("role", "is_active", "is_staff", "created_at")
+    ordering = ("-created_at",)
+
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        ("Personal info", {"fields": ("email",)}),
+        ("Role & Permissions", {"fields": ("role", "is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Important dates", {"fields": ("last_login", "created_at")}),
+    )
+    readonly_fields = ("created_at", "last_login")
 
 
 class BaseUserProfileAdmin(admin.ModelAdmin):
@@ -35,14 +44,6 @@ class BaseUserProfileAdmin(admin.ModelAdmin):
     def get_user_id(self, obj):
         return self._get_user(obj).id
 
-    @admin.display(description="First Name")
-    def get_f_name(self, obj):
-        return self._get_user(obj).f_name
-
-    @admin.display(description="Last Name")
-    def get_l_name(self, obj):
-        return self._get_user(obj).l_name
-
     @admin.display(description="Email")
     def get_email(self, obj):
         return self._get_user(obj).email
@@ -53,16 +54,21 @@ class AttendeeProfileAdmin(BaseUserProfileAdmin):
     user_relation_field = "attendee"
     list_display = (
         "get_user_id",
-        "get_f_name",
-        "get_l_name",
         "get_email",
+        "f_name",
+        "l_name",
+        "city",
+        "mobile",
         "points",
     )
     search_fields = (
         "attendee__email",
-        "attendee__f_name",
-        "attendee__l_name",
+        "f_name",
+        "l_name",
+        "mobile",
+        "city",
     )
+    list_filter = ("city", "gender")
 
 
 @admin.register(ManagerProfile)
@@ -70,18 +76,21 @@ class ManagerProfileAdmin(BaseUserProfileAdmin):
     user_relation_field = "manager"
     list_display = (
         "get_user_id",
-        "get_f_name",
-        "get_l_name",
         "get_email",
+        "f_name",
+        "l_name",
         "organization",
         "registration_no",
+        "city",
     )
     search_fields = (
         "manager__email",
-        "manager__f_name",
+        "f_name",
+        "l_name",
         "organization",
         "registration_no",
     )
+    list_filter = ("city",)
 
 
 @admin.register(EmployeeProfile)
@@ -89,12 +98,16 @@ class EmployeeProfileAdmin(BaseUserProfileAdmin):
     user_relation_field = "employee"
     list_display = (
         "get_user_id",
-        "get_f_name",
-        "get_l_name",
         "get_email",
+        "f_name",
+        "l_name",
+        "city",
+        "mobile",
     )
     search_fields = (
         "employee__email",
-        "employee__f_name",
-        "employee__l_name",
+        "f_name",
+        "l_name",
+        "mobile",
     )
+    list_filter = ("city", "gender")
