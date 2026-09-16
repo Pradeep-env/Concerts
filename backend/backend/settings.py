@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ezt_uc-lsa=pg5few_pxtl#3kk73&vs87rax*qmc^(%99q(u3@
 DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
-
+AUTH_USER_MODEL = "accounts.User"
 
 # Application definition
 
