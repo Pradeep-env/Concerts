@@ -88,6 +88,42 @@ def complete_profile(request):
         status=status.HTTP_201_CREATED,
     )
 
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    ROLE_HANDLERS = {
+        "user": (AttendeeProfile, AttendeeProfileSerializer, "Attendee", "attendee"),
+        "manager": (ManagerProfile, ManagerProfileSerializer, "Manager", "manager"),
+        "employee": (EmployeeProfile, EmployeeProfileSerializer, "Employee", "employee"),
+    }
+    user = request.user
+
+    if user.role not in ROLE_HANDLERS:
+        return Response(
+            {"error": f"Invalid role: {user.role}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    profile_model, serializer_class, role_label, fk_field = ROLE_HANDLERS[
+        user.role
+    ]
+
+    try:
+        profile = profile_model.objects.get(**{fk_field: user})
+    except profile_model.DoesNotExist:
+        return Response(
+            {"error": "Profile not found. Please create it first."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    serializer = serializer_class(profile, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+    return Response(
+        {"message": f"{role_label} profile updated", "data": serializer.data},
+        status=status.HTTP_200_OK,
+    )
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
