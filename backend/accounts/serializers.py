@@ -26,7 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
 class AttendeeProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttendeeProfile
-        fields = BASE_PROFILE_FIELDS
+        fields = BASE_PROFILE_FIELDS + ["points"]
+        read_only_fields = ["points"]
 
 
 class ManagerProfileSerializer(serializers.ModelSerializer):
