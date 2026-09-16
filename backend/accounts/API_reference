@@ -12,39 +12,70 @@ output:
 
 output: Admin Dashboard
 
-3. http://localhost/api/users/ [GET]
-
-output:
-{
-        "id": "1e4f3412-8241-4d3d-8ef2-cea5f15ff995",
-        "f_name": "pradeep",
-        "l_name": "kh",
-        "age": 22,
-        "gender": "male",
-        "city": "Bengaluru",
-        "mobile": "9876543210",
-        "role": "user",
-        "email": "pradeepkh312@gmail.com",
-        "password": "abcd1234",
-        "created_at": "2026-09-13T11:56:30.300791Z"
-    },
-    {
-        "id": "2e55ef4d-75c8-405e-9ea8-80bb7fb770e5",
-        "f_name": "jhon",
-        "l_name": "Doe",
-        "age": 23,
-        "gender": "male",
-        "city": "Delhi",
-        "mobile": "9876543210",
-        "role": "user",
-        "email": "jhon.doe@mail.com",
-        "password": "abcd1234",
-        "created_at": "2026-09-14T11:26:53.610787Z"
-    },
-
 4. http://localhost/api/users/signup [POST]
 
 input:
+{
+"username" : "john",
+"role" : "user",
+"email" : "jhon.doe@mail.com",
+"password" : "abcd1234"
+}
+
+
+output:
+{
+  "message": "User registered successfully.",
+  "user_id": 2,
+  "role": "user"
+}
+
+5. http://localhost/api/users/login [POST]
+
+input:
+{
+"email" : "jhon.doe@mail.com",
+"password" : "abcd1234"
+}
+
+output:
+{
+  "message": "Login successful",
+  "tokens": {
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5MDE1MjkxMywiaWF0IjoxNzg5NTQ4MTEzLCJqdGkiOiI2MzhiODU3YTI5MjM0ZWJjYjg5OTMzZTY4MmUzNmYzMCIsInVzZXJfaWQiOiIyIiwicm9sZSI6InVzZXIifQ.LM_irVJo3zwFSV71nap0CWZHMzWHO2R-Eh9q7sae5uc",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg5NTQ5MDEzLCJpYXQiOjE3ODk1NDgxMTMsImp0aSI6IjdlMzFiOTM0M2I2NDQ4YzU5MzM3NzMzNjRkZjI4M2U3IiwidXNlcl9pZCI6IjIiLCJyb2xlIjoidXNlciJ9.Utc7I5tfknFZpWzqbKZtQ01l6zSH6LqmtxquHtrVgLE"
+  },
+  "user": {
+    "id": 2,
+    "email": "jhon.doe@mail.com",
+    "username": "john",
+    "role": "user"
+  }
+}
+
+6. http://localhost/api/users/ [GET] [Authentication needed] [temporary API]
+
+output:
+[
+  {
+    "id": 1,
+    "email": "example@gmail.com",
+    "username": "pradeep",
+    "role": "user",
+    "created_at": "2026-09-16T08:38:32.964806Z"
+  },
+  {
+    "id": 2,
+    "email": "jhon.doe@mail.com",
+    "username": "john",
+    "role": "user",
+    "created_at": "2026-09-16T08:41:36.681981Z"
+  }
+]
+
+7. http://localhost/api/users/profile [POST] [Authentication needed] [one time use]
+
+input: [for user/Attendee]
 {
 "f_name" : "jhon",
 "l_name" : "Doe",
@@ -52,24 +83,6 @@ input:
 "gender" : "male",
 "city" : "Delhi",
 "mobile" : "9876543210",
-"role" : "user",
-"email" : "jhon.doe@mail.com",
-"password" : "abcd1234"
-}
-
-output:
-{
-    "message": "User registered Successfully.",
-    "user_id": "e7f523fc-40f2-40dd-8597-5ceeae027e91",
-    "role": "user"
-}
-
-5. http://localhost/api/users/profile [POST]
-
-input: [for user/Attendee]
-{
-    "user_id": "2e55ef4d-75c8-405e-9ea8-80bb7fb770e5",
-    "points": 120
 }
 
 output:
@@ -79,7 +92,12 @@ output:
 
 input: [for employee]
 {
-    "user_id": "e7f523fc-40f2-40dd-8597-5ceeae027e91",
+    "f_name" : "jhon",
+    "l_name" : "Doe",
+    "age" : 23,
+    "gender" : "male",
+    "city" : "Delhi",
+    "mobile" : "9876543210",
     "experiance": { "1": {"term": 1, "manager_id": "2e55ef4d-75c8-405e-9ea8-80bb7fb770e5", "salary": 35000},
                     "2": {"term": 2, "manager_id": "5bvssrfv-75c8-405e-9ea8-80bb7fb770e5", "salary": 42000} 
                 },
@@ -93,7 +111,12 @@ output:
 
 input: [for Manager]
 {
-    "user_id": "6a21bca6-d215-4d00-b9c2-d426e5c72df5",
+    "f_name" : "jhon",
+    "l_name" : "Doe",
+    "age" : 23,
+    "gender" : "male",
+    "city" : "Delhi",
+    "mobile" : "9876543210",
     "organization": "Dance_MC_Dance",
     "bank_details": {"name": "ABC Bank", "Branch": "Delhi", "IFSC": "ABCB4456", "ACC No": "123456789"},
     "registration_no": "REGmgr-02378",
@@ -105,24 +128,43 @@ output:
     "message": "Manager profile created"
 }
 
-6. http://localhost/api/users/login [POST]
+8. http://localhost/api/users/profile [GET] [Authentication needed]
+output:
+displays all details of user according to role (password will not be displayed)
+
+9. http://localhost/api/users/profile/update [PATCH] [Authentication needed]
 
 input:
 {
-"email": "james.toy@mail.com",
-"password": "abcd1234"
+"f_name" : "jhon",
+"l_name" : "Doe",
+"age" : 23,
+"gender" : "male",
+"city" : "Delhi",
+"mobile" : "9876543210"
 }
 
 output:
 {
-    "message": "Login successful",
-    "tokens": {
-        "refresh": ".........",
-        "access": "........."
-        "id": "62e61c1a-648a-49e9-9938-4c042b90aa2f",
-        "email": "james.toy@mail.com",
-        "role": "manager",
-        "f_name": "james",
-        "l_name": "roy"
-    }
+  "message": "Attendee profile updated",
+  "data": {
+    "f_name": "jhon",
+    "l_name": "Doe",
+    "age": 23,
+    "gender": "male",
+    "city": "Delhi",
+    "mobile": "9876543210"
+  }
+}
+
+10. http://localhost/api/token/refresh/ [POST] [Authentication needed]
+
+input:
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5MDE1MjkxMywiaWF0IjoxNzg5NTQ4MTEzLCJqdGkiOiI2MzhiODU3YTI5MjM0ZWJjYjg5OTMzZTY4MmUzNmYzMCIsInVzZXJfaWQiOiIyIiwicm9sZSI6InVzZXIifQ.LM_irVJo3zwFSV71nap0CWZHMzWHO2R-Eh9q7sae5uc"
+}
+
+output:
+{
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg5NTUzMDU3LCJpYXQiOjE3ODk1NTIxNTcsImp0aSI6ImFhODg3NGE1Zjg1OTQ3NmJhMWE0YzhmNTFjN2U2NDQ2IiwidXNlcl9pZCI6IjIiLCJyb2xlIjoidXNlciJ9.WGZbyKjUqu1bHdkWwI7fj--58apJ2enpaLYI8NhdBBc"
 }
