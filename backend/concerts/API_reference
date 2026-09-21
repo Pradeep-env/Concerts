@@ -1,0 +1,71 @@
+API Endpoints
+
+1. http://localhost/api/concerts/create [POST] [Authentication needed] [Manager only]
+
+input:
+{
+"title" : "AJ rockes",
+"venue" : "Noida",
+"date" : "2026-12-03:08:30",
+"artists": ["AJ", "Jay"],
+"description": "Diwali special beats",
+"contact": {"RSVP": "90873763887", "support": "278738788283"}
+}
+
+output:
+{
+  "message": "New concert created successfully",
+  "data": {
+    "id": 2,
+    "title": "AJ rockes",
+    "venue": "Noida",
+    "date": "2026-12-03T08:30:00Z",
+    "artists": [
+      "AJ",
+      "Jay"
+    ],
+    "description": "Diwali special beats",
+    "contact": {
+      "RSVP": "90873763887",
+      "support": "278738788283"
+    },
+    "status": "upcoming",
+    "created_at": "2026-09-21T15:19:45.826788Z"
+  }
+}
+
+2. http://localhost/api/concerts/edit/{concert_id}/ [PATCH] [Authentication needed] [Manager only]
+ input:
+ {
+"artists": ["AJ", "Jay", "DJ"],
+}
+
+output:
+{
+  "message": "Concert updated successfully",
+  "data": {
+    "id": 2,
+    "title": "AJ rockes",
+    "venue": "Noida",
+    "date": "2026-12-03T08:30:00Z",
+    "artists": [
+      "AJ",
+      "Jay",
+      "DJ"
+    ],
+    "description": "Diwali special beats",
+    "contact": {
+      "RSVP": "90873763887",
+      "support": "278738788283"
+    },
+    "status": "upcoming",
+    "created_at": "2026-09-21T15:19:45.826788Z"
+  }
+}
+
+3. http://localhost/api/concerts/edit/{concert_id}/ [DELETE] [Authentication needed] [Manager only]
+
+output:
+{
+  "message": "Concert deleted successfully"
+}
