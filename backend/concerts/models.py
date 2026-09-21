@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import AttendeeProfile, ManagerProfile
+from accounts.models import AttendeeProfile, ManagerProfile
 
 
 class Concert(models.Model):
